@@ -1,9 +1,9 @@
 import requests
 import hashlib
 
-TEST_MODE = 1
-def _update_dns(domain,challenge,action):
 
+def _update_dns(domain,challenge,action):
+ TEST_MODE = 1
  if action == 'add' :
      action = 'set_dns_zone'
  elif action == 'delete':
@@ -11,8 +11,8 @@ def _update_dns(domain,challenge,action):
  connection_options = {
         'live' : {
          # IP whitelisting required
-             'reseller_username': '<YOUR RESELLER USERNAME>',
-             'api_key':'<YOUR API KEY>',
+             'reseller_username': 'zaincloud',
+             'api_key':'0261e22a98a7017ca635ef68161f12cd5320fb1f1cc6f12b943e574a8b090cc58d02c48b17b049d4364dc3a13b29b7d57fd711343bfc8492',
              'api_host_port': 'https://rr-n1-tor.opensrs.net:55443',
         },
         'test' : {
