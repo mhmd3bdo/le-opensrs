@@ -1,0 +1,16 @@
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+prompt             = no
+[ req_distinguished_name ]
+countryName                 = SD
+stateOrProvinceName         = Khartoum
+localityName               = Khartoum
+organizationName           = Zain
+commonName                 = mahmoud-syber.com
+[ req_ext ]
+subjectAltName = @alt_names
+[alt_names]
+DNS.1   = mahmoud-syber.com
+DNS.2   = *.mahmoud-syber.com

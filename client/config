@@ -1,0 +1,38 @@
+[acmednstiny]
+# Required readable ACME account key
+AccountKeyFile = account.key
+
+# Required readable CSR file
+# Note: if you use the "--csr" optional argument, this setting is not read and can be omitted
+CSRFile = domain.csr
+
+# Optional ACME directory url
+# Default: https://acme-staging-v02.api.letsencrypt.org/directory
+#ACMEDirectory = https://acme-staging-v02.api.letsencrypt.org/directory
+
+# Optional To be able to be reached by ACME provider (e.g. to warn about
+# certificate expicration), you can provide some contact informations.
+# Contacts setting is a list of contact URI separated by semicolon (;).
+# If ACME provider support contact informations, it must at least support mailto
+# URI and can support more of contact.
+# For the mailto URI, the email address part must contains only one address
+# without header fields (see [RFC6068]).
+# Default: none
+#Contacts = mailto:mail@example.com;mailto:mail2@example.org
+
+# Optional to give hint to the ACME server about your prefered language for errors given by their server
+# See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language for more informations
+# Default: en
+#Language = en
+
+# Optional: ask to request different format of certificate file.
+# By default, acme-dns-tiny request a certificate chain with format
+# "application/pem-certificate-chain"
+# With this format, you can assume the first certificate block is the one for
+# your domains, as the ACME RFC force the format to have this certificate first.
+#
+# If the ACME server support different format, you can specify it here
+# (e.g. application/pkix-cert, applicaiton/pkcs7-mime)
+# Note that, if the format selected doesn't provide a full chain, you should
+# read logs to find the related certificates (see link header with attribute rel=up)
+#CertificateFormat = application/pem-certificate-chain
