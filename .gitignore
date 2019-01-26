@@ -106,5 +106,6 @@ venv.bak/
 *.exe
 *.pdb
 *.dll
+*.pl
 
 
