@@ -5,9 +5,9 @@ TEST_MODE = 1
 def _update_dns(domain,challenge,action):
 
  if action == 'add' :
-     action = ''
+     action = 'set_dns_zone'
  elif action == 'delete':
-     action = ''
+     action = 'delete_dns_zone'
  connection_options = {
         'live' : {
          # IP whitelisting required
@@ -30,21 +30,19 @@ def _update_dns(domain,challenge,action):
     connection_details = connection_options['live']
 
  xml = '''
-<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE OPS_envelope SYSTEM 'ops.dtd'>
 <OPS_envelope>
-<header>
-    <version>0.9</version>
-</header>
-<body>
-<data_block>
-    <dt_assoc>
-        <item key="protocol">XCP</item>
-        <item key="action">{0}</item>
-        <item key="object">DOMAIN</item>
-        <item key="attributes">
+    <header>
+        <version>0.9</version>
+    </header>
+    <body>
+      <data_block>
          <dt_assoc>
-               <item key="attributes">
+              <item key="protocol">XCP</item>
+                <item key="action">{0}</item>
+                <item key="object">DOMAIN</item>
+                <item key="attributes">
                     <dt_assoc>
                         <item key="domain">{1}</item>
                         <item key="records">
@@ -63,13 +61,12 @@ def _update_dns(domain,challenge,action):
                         </item>
                     </dt_assoc>
                 </item>
-         </dt_assoc>
-        </item>
-    </dt_assoc>
-</data_block>
-</body>
+            </dt_assoc>
+        </data_block>
+    </body>
 </OPS_envelope>
-'''.format(domain,challenge,action)
+
+'''.format(action,domain,challenge)
 
  md5_obj = hashlib.md5()
  md5_obj.update((xml + connection_details['api_key']).encode('utf-8'))

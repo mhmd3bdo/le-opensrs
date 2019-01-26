@@ -18,7 +18,7 @@ CSRFile = domain.csr
 # For the mailto URI, the email address part must contains only one address
 # without header fields (see [RFC6068]).
 # Default: none
-#Contacts = mailto:mail@example.com;mailto:mail2@example.org
+Contacts = mailto:m.abdalwahid@sybertechnology.com
 
 # Optional to give hint to the ACME server about your prefered language for errors given by their server
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language for more informations

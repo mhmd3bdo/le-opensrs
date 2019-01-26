@@ -54,7 +54,7 @@ def get_crt(config, log=LOGGER):
 
     # main code
     adtheaders = {'User-Agent': 'acme-dns-tiny/2.1',
-                  'Accept-Language': config["acmednstiny"].get("Language", "en")
+                  'Accept-Language': 'en'
                   }
     joseheaders = copy.deepcopy(adtheaders)
     joseheaders['Content-Type'] = 'application/jose+json'
@@ -244,42 +244,40 @@ def get_crt(config, log=LOGGER):
 
 
 def main(argv):
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="Tiny ACME client to get TLS certificate by responding to DNS challenges.",
-        epilog="""As the script requires access to your private ACME account key and dns server,
-so PLEASE READ THROUGH IT (it's about 300 lines, so it won't take long) !
+#     parser = argparse.ArgumentParser(
+#         formatter_class=argparse.RawDescriptionHelpFormatter,
+#         description="Tiny ACME client to get TLS certificate by responding to DNS challenges.",
+#         epilog="""As the script requires access to your private ACME account key and dns server,
+# so PLEASE READ THROUGH IT (it's about 300 lines, so it won't take long) !
+#
+# Example: requests certificate chain and store it in chain.crt
+#   python3 acme_dns_tiny.py ./example.ini > chain.crt
+#
+# See example.ini file to configure correctly this script."""
+#     )
+#     parser.add_argument("--quiet", action="store_const", const=logging.ERROR, help="show only errors on stderr")
+#     parser.add_argument("--verbose", action="store_const", const=logging.DEBUG,
+#                         help="show all debug informations on stderr")
+#     parser.add_argument("--csr",
+#                         help="specifies CSR file path to use instead of the CSRFile option from the configuration file.")
+#     parser.add_argument("configfile", help="path to your configuration file")
+#   args = parser.parse_args(argv)
+#
+ config = configparser.ConfigParser()
+ config.read_dict({"acmednstiny": {"ACMEDirectory": "https://acme-staging-v02.api.letsencrypt.org/directory"}})
+ config.read('config')
+#
+#     if args.csr:
+# config.set("acmednstiny", "csrfile", args.csr)
+ set(config.options("acmednstiny"))
+#     if (set(["accountkeyfile", "csrfile", "acmedirectory"]) - set(config.options("acmednstiny"))
+#             or set(["keyname", "keyvalue", "algorithm"]) - set(config.options("TSIGKeyring"))
+#             or set(["zone", "host", "port", "ttl"]) - set(config.options("DNS"))):
+#         raise ValueError("Some required settings are missing.")
 
-Example: requests certificate chain and store it in chain.crt
-  python3 acme_dns_tiny.py ./example.ini > chain.crt
-
-See example.ini file to configure correctly this script."""
-    )
-    parser.add_argument("--quiet", action="store_const", const=logging.ERROR, help="show only errors on stderr")
-    parser.add_argument("--verbose", action="store_const", const=logging.DEBUG,
-                        help="show all debug informations on stderr")
-    parser.add_argument("--csr",
-                        help="specifies CSR file path to use instead of the CSRFile option from the configuration file.")
-    parser.add_argument("configfile", help="path to your configuration file")
-    args = parser.parse_args(argv)
-
-    config = configparser.ConfigParser()
-    config.read_dict({"acmednstiny": {"ACMEDirectory": "https://acme-staging-v02.api.letsencrypt.org/directory"},
-                      "DNS": {"Port": 53,
-                              "TTL": 10}})
-    config.read(args.configfile)
-
-    if args.csr:
-        config.set("acmednstiny", "csrfile", args.csr)
-
-    if (set(["accountkeyfile", "csrfile", "acmedirectory"]) - set(config.options("acmednstiny"))
-            or set(["keyname", "keyvalue", "algorithm"]) - set(config.options("TSIGKeyring"))
-            or set(["zone", "host", "port", "ttl"]) - set(config.options("DNS"))):
-        raise ValueError("Some required settings are missing.")
-
-    LOGGER.setLevel(args.verbose or args.quiet or logging.INFO)
-    signed_crt = get_crt(config, log=LOGGER)
-    sys.stdout.write(signed_crt)
+ LOGGER.setLevel(logging.INFO)
+ signed_crt = get_crt(config, log=LOGGER)
+ sys.stdout.write(signed_crt)
 
 
 if __name__ == "__main__":  # pragma: no cover
