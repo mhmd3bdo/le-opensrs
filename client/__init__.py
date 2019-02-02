@@ -147,7 +147,7 @@ def get_crt(config, log=LOGGER):
                 order["detail"], http_response.headers['Link'], order["instance"]))
     else:
         raise ValueError("Error getting new Order: {0} {1}".format(http_response.status_code, result))
-
+    print(order["authorizations"])
     # complete each authorization challenge
     for authz in order["authorizations"]:
         if order["status"] == "ready":
@@ -166,12 +166,17 @@ def get_crt(config, log=LOGGER):
         token = re.sub(r"[^A-Za-z0-9_\-]", "_", challenge["token"])
         keyauthorization = "{0}.{1}".format(token, jwk_thumbprint)
         keydigest64 = _b64(hashlib.sha256(keyauthorization.encode("utf8")).digest())
-        _update_dns("{0}".format(domain),"{0}".format(keydigest64),'add')
+        _update_dns("{0}".format(domain),"{0}".format(keydigest64))
         log.info(
             "Waiting for 1 TTL 350 seconds) before starting self challenge check.")
+        print(resolver.get_default_resolver())
+        res = resolver.Resolver()
+        res.nameservers = ['8.8.8.8']
+        resolver.nameserver = ['8.8.8.8']
         time.sleep(350)
         challenge_verified = False
         number_check_fail = 1
+
         while challenge_verified is False:
             try:
                 log.debug('Self test (try: {0}): Check resource with value "{1}" exits on nameservers: {2}'.format(
@@ -208,7 +213,8 @@ def get_crt(config, log=LOGGER):
                     raise ValueError("Challenge for domain {0} did not pass: {1}".format(
                         domain, challenge_status))
         finally:
-            _update_dns("{0}".format(domain), '"{0}"'.format(keydigest64), 'delete')
+             print("done verfying ...")
+             # _update_dns("{0}".format(domain), '"{0}"'.format(keydigest64), 'delete')
 
     log.info("Request to finalize the order (all chalenge have been completed)")
     csr_der = _b64(_openssl("req", ["-in", config["acmednstiny"]["CSRFile"], "-outform", "DER"]))
@@ -243,7 +249,7 @@ def get_crt(config, log=LOGGER):
     return http_response.text
 
 
-def main(argv):
+def main():
 #     parser = argparse.ArgumentParser(
 #         formatter_class=argparse.RawDescriptionHelpFormatter,
 #         description="Tiny ACME client to get TLS certificate by responding to DNS challenges.",
@@ -281,4 +287,4 @@ def main(argv):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    main(sys.argv[1:])
+    main()
