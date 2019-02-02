@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import argparse, subprocess, requests, json, sys, base64, binascii, time, hashlib, re, copy, logging, configparser
 from osrs import _update_dns
 import dns
@@ -169,30 +170,30 @@ def get_crt(config, log=LOGGER):
         _update_dns("{0}".format(domain),"{0}".format(keydigest64))
         log.info(
             "Waiting for 1 TTL 350 seconds) before starting self challenge check.")
-        print(resolver.get_default_resolver())
-        res = resolver.Resolver()
-        res.nameservers = ['8.8.8.8']
-        resolver.nameserver = ['8.8.8.8']
+        # print(resolver.get_default_resolver())
+        # res = resolver.Resolver()
+        # res.nameservers = ['8.8.8.8']
+        # resolver.nameserver = ['8.8.8.8']
         time.sleep(350)
-        challenge_verified = False
-        number_check_fail = 1
-
-        while challenge_verified is False:
-            try:
-                log.debug('Self test (try: {0}): Check resource with value "{1}" exits on nameservers: {2}'.format(
-                    number_check_fail, keydigest64, resolver.nameservers))
-                for response in resolver.query("_acme-challenge.{0}".format(domain), rdtype="TXT").rrset:
-                    log.debug("  - Found value {0}".format(response.to_text()))
-                    challenge_verified = challenge_verified or response.to_text() == '"{0}"'.format(keydigest64)
-            except dns.exception.DNSException as dnsexception:
-                log.debug("  - Will retry as a DNS error occurred while checking challenge: {0} : {1}".format(
-                    type(dnsexception).__name__, dnsexception))
-            finally:
-                if challenge_verified is False:
-                    if number_check_fail >= 10:
-                        raise ValueError("Error checking challenge, value not found: {0}".format(keydigest64))
-                    number_check_fail = number_check_fail + 1
-                    time.sleep(350)
+        # challenge_verified = False
+        # number_check_fail = 1
+        #
+        # while challenge_verified is False:
+        #     try:
+        #         log.debug('Self test (try: {0}): Check resource with value "{1}" exits on nameservers: {2}'.format(
+        #             number_check_fail, keydigest64, resolver.nameservers))
+        #         for response in resolver.query("_acme-challenge.{0}".format(domain), rdtype="TXT").rrset:
+        #             log.debug("  - Found value {0}".format(response.to_text()))
+        #             challenge_verified = challenge_verified or response.to_text() == '"{0}"'.format(keydigest64)
+        #     except dns.exception.DNSException as dnsexception:
+        #         log.debug("  - Will retry as a DNS error occurred while checking challenge: {0} : {1}".format(
+        #             type(dnsexception).__name__, dnsexception))
+        #     finally:
+        #         if challenge_verified is False:
+        #             if number_check_fail >= 10:
+        #                 raise ValueError("Error checking challenge, value not found: {0}".format(keydigest64))
+        #             number_check_fail = number_check_fail + 1
+        #             time.sleep(350)
 
         log.info("Asking ACME server to validate challenge.")
         http_response, result = _send_signed_request(challenge["url"], {"keyAuthorization": keyauthorization})

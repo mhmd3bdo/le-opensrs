@@ -8,9 +8,9 @@ countryName                 = SD
 stateOrProvinceName         = Khartoum
 localityName               = Khartoum
 organizationName           = Zain
-commonName                 = mahmoud-syber.com
+commonName                 = zainblue.net
 [ req_ext ]
 subjectAltName = @alt_names
 [alt_names]
-DNS.1   = mahmoud-syber.com
-DNS.2   = *.mahmoud-syber.com
+DNS.1   = zainblue.net
+DNS.2   = *.zainblue.net
