@@ -1,8 +1,6 @@
 #!/usr/bin/python3
-import argparse, subprocess, requests, json, sys, base64, binascii, time, hashlib, re, copy, logging, configparser
+import subprocess, requests, json, sys, base64, binascii, time, hashlib, re, copy, logging, configparser
 from osrs import _update_dns
-import dns
-from dns import resolver
 
 LOGGER = logging.getLogger('acme_dns_tiny')
 LOGGER.addHandler(logging.StreamHandler())
@@ -86,7 +84,7 @@ def get_crt(config, log=LOGGER):
     jws_nonce = None
 
     log.info("Read CSR to find domains to validate.")
-    #openssl req -out domain.csr -newkey rsa:2048 -nodes -keyout domain.key -config crt.cfg
+    #openssl req -out domain.csr -newkey rsa:2048 -nodes -keyout domain.key -config crt.cnf
     csr = _openssl("req", ["-in", config["acmednstiny"]["CSRFile"], "-noout", "-text"]).decode("utf8")
     domains = set()
     common_name = re.search(r"Subject:.*?\s+?CN\s*?=\s*?([^\s,;/]+)", csr)
@@ -174,7 +172,7 @@ def get_crt(config, log=LOGGER):
         # res = resolver.Resolver()
         # res.nameservers = ['8.8.8.8']
         # resolver.nameserver = ['8.8.8.8']
-        time.sleep(350)
+        time.sleep(60)
         # challenge_verified = False
         # number_check_fail = 1
         #
@@ -215,7 +213,6 @@ def get_crt(config, log=LOGGER):
                         domain, challenge_status))
         finally:
              print("done verfying ...")
-             # _update_dns("{0}".format(domain), '"{0}"'.format(keydigest64), 'delete')
 
     log.info("Request to finalize the order (all chalenge have been completed)")
     csr_der = _b64(_openssl("req", ["-in", config["acmednstiny"]["CSRFile"], "-outform", "DER"]))
@@ -251,40 +248,17 @@ def get_crt(config, log=LOGGER):
 
 
 def main():
-#     parser = argparse.ArgumentParser(
-#         formatter_class=argparse.RawDescriptionHelpFormatter,
-#         description="Tiny ACME client to get TLS certificate by responding to DNS challenges.",
-#         epilog="""As the script requires access to your private ACME account key and dns server,
-# so PLEASE READ THROUGH IT (it's about 300 lines, so it won't take long) !
-#
-# Example: requests certificate chain and store it in chain.crt
-#   python3 acme_dns_tiny.py ./example.ini > chain.crt
-#
-# See example.ini file to configure correctly this script."""
-#     )
-#     parser.add_argument("--quiet", action="store_const", const=logging.ERROR, help="show only errors on stderr")
-#     parser.add_argument("--verbose", action="store_const", const=logging.DEBUG,
-#                         help="show all debug informations on stderr")
-#     parser.add_argument("--csr",
-#                         help="specifies CSR file path to use instead of the CSRFile option from the configuration file.")
-#     parser.add_argument("configfile", help="path to your configuration file")
-#   args = parser.parse_args(argv)
-#
+
  config = configparser.ConfigParser()
  config.read_dict({"acmednstiny": {"ACMEDirectory": "https://acme-staging-v02.api.letsencrypt.org/directory"}})
  config.read('config')
-#
-#     if args.csr:
-# config.set("acmednstiny", "csrfile", args.csr)
  set(config.options("acmednstiny"))
-#     if (set(["accountkeyfile", "csrfile", "acmedirectory"]) - set(config.options("acmednstiny"))
-#             or set(["keyname", "keyvalue", "algorithm"]) - set(config.options("TSIGKeyring"))
-#             or set(["zone", "host", "port", "ttl"]) - set(config.options("DNS"))):
-#         raise ValueError("Some required settings are missing.")
 
  LOGGER.setLevel(logging.INFO)
  signed_crt = get_crt(config, log=LOGGER)
  sys.stdout.write(signed_crt)
+ key = open("domain.key","r").read()
+ open("signed_crt.pem", "w").write(signed_crt+key)
 
 
 if __name__ == "__main__":  # pragma: no cover
