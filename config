@@ -3,7 +3,6 @@
 AccountKeyFile = account.key
 
 # Required readable CSR file
-# Note: if you use the "--csr" optional argument, this setting is not read and can be omitted
 CSRFile = domain.csr
 
 # Optional ACME directory url
@@ -36,3 +35,15 @@ Contacts = mailto:m.abdalwahid@sybertechnology.com
 # Note that, if the format selected doesn't provide a full chain, you should
 # read logs to find the related certificates (see link header with attribute rel=up)
 #CertificateFormat = application/pem-certificate-chain
+
+[opensrs]
+
+reseller_username = zaincloud
+
+# connection configuration for opensrs .. default is live connection parameter
+api_key = 0261e22a98a7017ca635ef68161f12cd5320fb1f1cc6f12b943e574a8b090cc58d02c48b17b049d4364dc3a13b29b7d57fd711343bfc8492
+api_host_port = https://rr-n1-tor.opensrs.net:55443
+
+#connection configuration for testing environment for opensrsr
+#api_key = 8fdc8834a8e27b73cd132632324ad87d25c9ccd116c7e2b94229915bf5c25f56a59394b13ab16e7caa67aefee2fd076d12aaf5c5fa78fbc2
+#api_host_port = https://horizon.opensrs.net:55443
