@@ -167,7 +167,7 @@ def get_crt(config, log=LOGGER):
         keydigest64 = _b64(hashlib.sha256(keyauthorization.encode("utf8")).digest())
         _update_dns("{0}".format(domain),"{0}".format(keydigest64))
         log.info(
-            "Waiting for 1 TTL 350 seconds) before starting self challenge check.")
+            "Waiting for 1 TTL 60 seconds) before starting self challenge check.")
         # print(resolver.get_default_resolver())
         # res = resolver.Resolver()
         # res.nameservers = ['8.8.8.8']
