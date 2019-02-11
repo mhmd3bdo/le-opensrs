@@ -5,12 +5,12 @@ req_extensions     = req_ext
 prompt             = no
 [ req_distinguished_name ]
 countryName                 = SD
-stateOrProvinceName         = Khartoum
-localityName               = Khartoum
-organizationName           = Zain
-commonName                 = zainblue.net
+stateOrProvinceName         = KH
+localityName               = KH
+organizationName           = Organization
+commonName                 = example.com
 [ req_ext ]
 subjectAltName = @alt_names
 [alt_names]
-DNS.1   = zainblue.net
-DNS.2   = *.zainblue.net
+DNS.1   = example.com
+DNS.2   = *.example.com
