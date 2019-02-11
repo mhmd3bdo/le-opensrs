@@ -37,10 +37,10 @@ Contacts = mailto:yourmail@yourdomain.com
 #CertificateFormat = application/pem-certificate-chain
 
 [opensrs]
-
+#your opensrs reseller username
 reseller_username = example
 
+#remember to whitelist the public ip to acess the API
 # connection configuration for opensrs .. default is live connection parameter
-api_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+api_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 api_host_port = https://rr-n1-tor.opensrs.net:55443
-
