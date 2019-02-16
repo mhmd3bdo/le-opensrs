@@ -1,7 +1,7 @@
 # le-opensrs
 
 let's encrypt client to automate issuing and reissuing wildcard [Let's Encrypt] (https://letsencrypt.org/)
-certificates with opensrs API DNS , this scipt will retreive challenge from Let's Encrypt and will update 
+certificates with opensrs API DNS , this script will retreive challenge from Let's Encrypt and will update 
 it , in opensrs DNS , and the will ask Let's Encrypt to verify the challenge.
 
 
